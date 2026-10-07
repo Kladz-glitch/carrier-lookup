@@ -19,13 +19,15 @@ App Android moderna in Kotlin e Jetpack Compose, con filtro anti spam e blocco d
 
 ## 📥 Scarica l'app
 
-Non serve Android Studio: scarica l'APK dalla pagina **[Releases](https://github.com/Kladz-glitch/carrier-lookup/releases/latest)** e installalo sul telefono.
+Non serve Android Studio: scarica l'APK e installalo sul telefono.
 
-1. Dalla pagina Releases scarica il file `CarrierLookup.apk` (sezione *Assets*).
-2. Aprilo dal telefono. Android chiederà di consentire l'installazione da questa fonte: accetta.
+**👉 [Scarica CarrierLookup.apk](https://github.com/Kladz-glitch/carrier-lookup/raw/main/download/CarrierLookup.apk)**
+
+1. Apri il link dal telefono e scarica il file.
+2. Aprilo. Android chiederà di consentire l'installazione da questa fonte: accetta.
 3. Premi **Installa**.
 
-Serve Android 8.0 o superiore.
+Serve Android 8.0 o superiore. Se Android avvisa che l'app non viene dal Play Store, è normale: è un'app indipendente.
 
 ## ✨ Cosa fa
 
