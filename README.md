@@ -77,7 +77,7 @@ Rilasciata con licenza **MIT**, vedi il file [LICENSE](LICENSE).
 
 **Carrier Lookup** is an Android app (Kotlin + Jetpack Compose, Material 3) that finds the carrier, line type and country of a phone number. It uses the omkar.cloud API online and Google's libphonenumber offline, and includes a rule-based spam risk check, a personal blocklist, incoming call blocking, search history, credit counter, dark/light theme and Italian/English UI.
 
-To build it, open the project in Android Studio and add `omkar.apiKey` and `google.webClientId` to `local.properties` (see `local.properties.example`). Operator logos are trademarks of their respective owners and are used only to identify the carrier.
+To build it, just open the project in Android Studio and press Run: a shared API key and Google Client ID are already included (200 online searches per month in total, then it falls back to offline). To use your own, set `omkar.apiKey` and `google.webClientId` in `local.properties` (see `local.properties.example`). Google sign-in only works for builds signed with the author's key. Operator logos are trademarks of their respective owners and are used only to identify the carrier.
 
 Released under the MIT license. Made by Clacson.
 
