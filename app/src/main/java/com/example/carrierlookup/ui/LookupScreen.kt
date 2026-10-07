@@ -38,6 +38,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Coffee
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.LocalOffer
@@ -246,7 +247,7 @@ fun LookupScreen(viewModel: LookupViewModel) {
                     onMenu = openMenu
                 )
                 TAB_OFFERS -> OffersTab(onMenu = openMenu)
-                TAB_SPAM -> SpamTab(onMenu = openMenu)
+                TAB_SPAM -> SpamTab(state = state, viewModel = viewModel, onMenu = openMenu)
                 TAB_HISTORY -> HistoryTab(
                     history = state.history,
                     onPick = {
@@ -428,7 +429,9 @@ private fun SearchTab(
         }
 
         // Risultato
-        ResultArea(state = state)
+        ResultArea(state = state, onToggleBlock = { e164, blocked ->
+            if (blocked) viewModel.unblock(e164) else viewModel.block(e164)
+        })
 
         // Crediti
         CreditsCard(times = state.usageTimes, onClick = onOpenUsage)
@@ -481,12 +484,15 @@ private fun Header(
 // ---- Risultato --------------------------------------------------------------
 
 @Composable
-private fun ResultArea(state: LookupUiState) {
+private fun ResultArea(state: LookupUiState, onToggleBlock: (String, Boolean) -> Unit) {
     Column(Modifier.animateContentSize()) {
         val result = state.result
         when {
             state.error != null -> ErrorCard(state.error)
-            result != null -> ResultCard(result)
+            result != null -> {
+                val blocked = result.e164 in state.blocklist
+                ResultCard(result, blocked) { onToggleBlock(result.e164, blocked) }
+            }
         }
     }
 }
@@ -503,7 +509,7 @@ private fun ErrorCard(message: String) {
 }
 
 @Composable
-private fun ResultCard(result: CarrierResult) {
+private fun ResultCard(result: CarrierResult, blocked: Boolean, onToggleBlock: () -> Unit) {
     val s = LocalStrings.current
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
@@ -556,8 +562,8 @@ private fun ResultCard(result: CarrierResult) {
             HLine()
             InfoRow(s.rowSource, result.sourceName)
 
-            val spam = remember(result) {
-                SpamAnalyzer.assess(result.e164, result.lineType, result.isValid, false)
+            val spam = remember(result, blocked) {
+                SpamAnalyzer.assess(result.e164, result.lineType, result.isValid, blocked)
             }
             val spamColor = when (spam.level) {
                 SpamLevel.LOW -> AppColors.Green
@@ -584,6 +590,12 @@ private fun ResultCard(result: CarrierResult) {
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
+            }
+            Spacer(Modifier.height(8.dp))
+            TextButton(onClick = onToggleBlock) {
+                Icon(Icons.Filled.Block, null, tint = AppColors.Red, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(if (blocked) s.blockRemove else s.blockAdd, color = AppColors.Red)
             }
 
             if (result.note != null) {
@@ -1139,12 +1151,29 @@ private fun OffersTab(onMenu: () -> Unit) {
     }
 }
 
-// ---- Anti spam (Hiya) ------------------------------------------------------
+// ---- Anti spam --------------------------------------------------------------
 
 @Composable
-private fun SpamTab(onMenu: () -> Unit) {
+private fun SpamTab(state: LookupUiState, viewModel: LookupViewModel, onMenu: () -> Unit) {
     val s = LocalStrings.current
     val context = LocalContext.current
+
+    fun roleManager(): RoleManager? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) context.getSystemService(RoleManager::class.java) else null
+
+    val roleAvailable = remember {
+        roleManager()?.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING) == true
+    }
+    fun isHeld(): Boolean = roleManager()?.isRoleHeld(RoleManager.ROLE_CALL_SCREENING) == true
+
+    var active by remember { mutableStateOf(isHeld()) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        active = isHeld()
+    }
+    LaunchedEffect(Unit) { viewModel.refreshSpam() }
+
+    var input by remember { mutableStateOf("") }
+    var inputError by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -1162,56 +1191,105 @@ private fun SpamTab(onMenu: () -> Unit) {
         AppCard {
             Column(Modifier.padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Shield, null, tint = AppColors.Green)
+                    Icon(Icons.Filled.Shield, null, tint = if (active) AppColors.Green else AppColors.TextSecondary)
                     Spacer(Modifier.width(10.dp))
-                    Text(s.hiyaTitle, color = AppColors.TextPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(s.callFilter, color = AppColors.TextPrimary, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                    Text(
+                        if (active) s.filterActive else s.filterInactive,
+                        color = if (active) AppColors.Green else AppColors.TextSecondary,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
-                Spacer(Modifier.height(8.dp))
-                Text(s.hiyaExplain, color = AppColors.TextSecondary, style = MaterialTheme.typography.bodyMedium)
+                if (!active) {
+                    Spacer(Modifier.height(8.dp))
+                    if (roleAvailable) {
+                        Text(s.filterExplain, color = AppColors.TextSecondary, style = MaterialTheme.typography.bodySmall)
+                        Spacer(Modifier.height(10.dp))
+                        Button(
+                            onClick = {
+                                roleManager()?.let {
+                                    launcher.launch(it.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING))
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp),
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = AppColors.Accent)
+                        ) { Text(s.filterActivate) }
+                    } else {
+                        Text(s.filterUnavailable, color = AppColors.TextSecondary, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
                 Spacer(Modifier.height(14.dp))
-                Text(s.hiyaSteps, color = AppColors.TextPrimary, style = MaterialTheme.typography.bodyMedium)
-                Spacer(Modifier.height(16.dp))
-                Button(
-                    onClick = {
-                        runCatching {
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://play.google.com/store/search?q=Hiya%20spam%20blocker&c=apps")
-                                )
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Accent)
-                ) { Text(s.hiyaInstall) }
+                HLine()
                 Spacer(Modifier.height(10.dp))
-                OutlinedButton(
-                    onClick = {
-                        val opened = runCatching {
-                            context.startActivity(Intent(android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS))
-                        }.isSuccess
-                        if (!opened) {
-                            runCatching { context.startActivity(Intent(android.provider.Settings.ACTION_SETTINGS)) }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    border = BorderStroke(1.dp, AppColors.Border)
-                ) { Text(s.hiyaSetDefault, color = AppColors.TextPrimary) }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text(s.blockSuspected, color = AppColors.TextPrimary)
+                        Text(s.blockSuspectedHint, color = AppColors.TextSecondary, style = MaterialTheme.typography.bodySmall)
+                    }
+                    Switch(
+                        checked = state.blockSuspected,
+                        onCheckedChange = viewModel::setBlockSuspected,
+                        colors = SwitchDefaults.colors(checkedTrackColor = AppColors.Accent)
+                    )
+                }
+                Spacer(Modifier.height(10.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(s.blockedCalls, color = AppColors.TextSecondary, modifier = Modifier.weight(1f))
+                    Text(
+                        state.blockedCount.toString(),
+                        color = AppColors.TextPrimary,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
             }
         }
 
         AppCard {
             Column(Modifier.padding(16.dp)) {
-                Text(s.hiyaSamsungTitle, color = AppColors.TextPrimary, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(6.dp))
-                Text(s.hiyaSamsung, color = AppColors.TextSecondary, style = MaterialTheme.typography.bodySmall)
+                Text(s.blocklistTitle, color = AppColors.TextPrimary, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(10.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedTextField(
+                        value = input,
+                        onValueChange = {
+                            input = it.filter { c -> c.isDigit() || c == '+' || c == ' ' }.take(20)
+                            inputError = false
+                        },
+                        modifier = Modifier.weight(1f),
+                        placeholder = { Text(s.addNumberHint) },
+                        singleLine = true,
+                        isError = inputError,
+                        supportingText = if (inputError) ({ Text(s.invalidNumberInput) }) else null,
+                        shape = RoundedCornerShape(14.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = {
+                            if (viewModel.blockRaw(input)) input = "" else inputError = true
+                        })
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = { if (viewModel.blockRaw(input)) input = "" else inputError = true },
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Accent)
+                    ) { Text(s.add) }
+                }
+                Spacer(Modifier.height(8.dp))
+                if (state.blocklist.isEmpty()) {
+                    Text(s.blocklistEmpty, color = AppColors.TextSecondary, style = MaterialTheme.typography.bodyMedium)
+                } else {
+                    state.blocklist.forEach { number ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(number, color = AppColors.TextPrimary, modifier = Modifier.weight(1f))
+                            IconButton(onClick = { viewModel.unblock(number) }) {
+                                Icon(Icons.Filled.Delete, s.blockRemove, tint = AppColors.Red)
+                            }
+                        }
+                    }
+                }
             }
         }
 
