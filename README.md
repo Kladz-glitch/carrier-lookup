@@ -41,17 +41,17 @@ App Android moderna in Kotlin e Jetpack Compose, con filtro anti spam e blocco d
 ## 🚀 Come compilarla
 
 1. Clona il repository e aprilo con **Android Studio**.
-2. Crea (o apri) il file `local.properties` nella cartella principale e aggiungi:
+2. Premi ▶ con un telefono collegato. La chiave API e il Client ID di Google dell'app sono già inclusi, quindi funziona subito.
+3. (Facoltativo) Per usare una chiave tua, aggiungi in `local.properties`:
    ```properties
    omkar.apiKey=LA_TUA_CHIAVE
    google.webClientId=IL_TUO_CLIENT_ID.apps.googleusercontent.com
    ```
    Trovi un esempio in `local.properties.example`. Il file `local.properties` non viene mai caricato su GitHub.
-3. Aspetta la sincronizzazione di Gradle e premi ▶ con un telefono collegato.
 
-**Chiave API.** Si ottiene gratis su [omkar.cloud](https://www.omkar.cloud). Senza chiave l'app funziona solo in modalità offline.
+**Chiave API.** Quella inclusa è condivisa da tutti (200 ricerche al mese in tutto): se finisce, l'app passa alla ricerca offline. Per avere crediti tuoi, prendi una chiave gratuita su [omkar.cloud](https://www.omkar.cloud).
 
-**Accesso con Google.** Nella Google Cloud Console servono un client OAuth di tipo *Android* (con il nome del pacchetto `com.example.carrierlookup` e lo SHA-1 della tua chiave) e uno di tipo *Applicazione web*. Il Client ID del secondo va in `local.properties`. Senza, l'app funziona lo stesso ma senza accesso.
+**Accesso con Google.** L'accesso funziona solo per gli account autorizzati nel progetto Google dell'app e per le build firmate con la chiave dell'autore. Se compili tu l'app con una chiave diversa, nella Google Cloud Console servono un client OAuth di tipo *Android* (con il nome del pacchetto `com.example.carrierlookup` e lo SHA-1 della tua chiave) e uno di tipo *Applicazione web*. Il Client ID del secondo va in `local.properties`. Senza, l'app funziona lo stesso ma senza accesso.
 
 **Loghi degli operatori.** Sono in `app/src/main/res/drawable/` (`logo_tim.png`, `logo_vodafone.png`, `logo_windtre.png`, `logo_iliad.png`, `logo_fastweb.png`). Sono marchi dei rispettivi proprietari, usati solo per indicare l'operatore. Se manca un file, l'app mostra un cerchio colorato con l'iniziale.
 
@@ -60,7 +60,7 @@ App Android moderna in Kotlin e Jetpack Compose, con filtro anti spam e blocco d
 - Con la **portabilità del numero** (MNP) l'operatore mostrato può non essere quello attuale.
 - Non esiste un elenco mondiale di spammer: il giudizio anti spam si basa su regole (tipo di numero, prefissi usati nelle truffe) e sulla tua lista nera.
 - Il blocco delle chiamate funziona solo dopo aver scelto l'app come app anti spam nelle impostazioni di Android (da Android 10).
-- La chiave API, anche se tenuta fuori dal codice, può essere estratta dall'APK. Usa una chiave tua e tieni d'occhio i crediti.
+- La chiave API inclusa è pubblica: chiunque può usarla e consumarne i crediti. Per un uso serio metti una chiave tua.
 
 ## ☕ Sostieni il progetto
 
