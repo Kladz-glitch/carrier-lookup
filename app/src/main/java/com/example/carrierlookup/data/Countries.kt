@@ -1,0 +1,68 @@
+package com.example.carrierlookup.data
+
+/** Paese selezionabile: bandiera, nome e prefisso internazionale. */
+data class Country(val flag: String, val name: String, val prefix: String)
+
+object Countries {
+    val all: List<Country> = listOf(
+        Country("🇮🇹", "Italia", "39"),
+        Country("🇨🇭", "Svizzera", "41"),
+        Country("🇸🇲", "San Marino", "378"),
+        Country("🇻🇦", "Città del Vaticano", "379"),
+        Country("🇫🇷", "Francia", "33"),
+        Country("🇪🇸", "Spagna", "34"),
+        Country("🇩🇪", "Germania", "49"),
+        Country("🇬🇧", "Regno Unito", "44"),
+        Country("🇦🇹", "Austria", "43"),
+        Country("🇧🇪", "Belgio", "32"),
+        Country("🇳🇱", "Paesi Bassi", "31"),
+        Country("🇵🇹", "Portogallo", "351"),
+        Country("🇮🇪", "Irlanda", "353"),
+        Country("🇱🇺", "Lussemburgo", "352"),
+        Country("🇬🇷", "Grecia", "30"),
+        Country("🇲🇹", "Malta", "356"),
+        Country("🇦🇱", "Albania", "355"),
+        Country("🇷🇴", "Romania", "40"),
+        Country("🇵🇱", "Polonia", "48"),
+        Country("🇨🇿", "Cechia", "420"),
+        Country("🇭🇺", "Ungheria", "36"),
+        Country("🇸🇮", "Slovenia", "386"),
+        Country("🇭🇷", "Croazia", "385"),
+        Country("🇧🇬", "Bulgaria", "359"),
+        Country("🇺🇦", "Ucraina", "380"),
+        Country("🇷🇺", "Russia", "7"),
+        Country("🇹🇷", "Turchia", "90"),
+        Country("🇸🇪", "Svezia", "46"),
+        Country("🇳🇴", "Norvegia", "47"),
+        Country("🇩🇰", "Danimarca", "45"),
+        Country("🇫🇮", "Finlandia", "358"),
+        Country("🇺🇸", "Stati Uniti / Canada", "1"),
+        Country("🇲🇽", "Messico", "52"),
+        Country("🇧🇷", "Brasile", "55"),
+        Country("🇦🇷", "Argentina", "54"),
+        Country("🇨🇴", "Colombia", "57"),
+        Country("🇻🇪", "Venezuela", "58"),
+        Country("🇵🇪", "Perù", "51"),
+        Country("🇨🇱", "Cile", "56"),
+        Country("🇲🇦", "Marocco", "212"),
+        Country("🇹🇳", "Tunisia", "216"),
+        Country("🇪🇬", "Egitto", "20"),
+        Country("🇳🇬", "Nigeria", "234"),
+        Country("🇿🇦", "Sudafrica", "27"),
+        Country("🇸🇳", "Senegal", "221"),
+        Country("🇦🇪", "Emirati Arabi", "971"),
+        Country("🇸🇦", "Arabia Saudita", "966"),
+        Country("🇮🇱", "Israele", "972"),
+        Country("🇮🇳", "India", "91"),
+        Country("🇵🇰", "Pakistan", "92"),
+        Country("🇧🇩", "Bangladesh", "880"),
+        Country("🇨🇳", "Cina", "86"),
+        Country("🇯🇵", "Giappone", "81"),
+        Country("🇰🇷", "Corea del Sud", "82"),
+        Country("🇵🇭", "Filippine", "63"),
+        Country("🇹🇭", "Thailandia", "66"),
+        Country("🇦🇺", "Australia", "61")
+    )
+
+    fun byPrefix(prefix: String): Country? = all.firstOrNull { it.prefix == prefix }
+}

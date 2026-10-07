@@ -1,0 +1,5 @@
+## Copia queste due righe in local.properties (file non caricato su GitHub)
+## Chiave API di omkar.cloud (https://www.omkar.cloud)
+omkar.apiKey=LA_TUA_CHIAVE
+## Client ID di tipo "Applicazione web" creato in Google Cloud Console
+google.webClientId=123456789-xxxx.apps.googleusercontent.com

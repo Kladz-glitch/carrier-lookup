@@ -1,0 +1,10 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+build/
+.DS_Store
+*.jks
+*.keystore
+# Loghi degli operatori: marchi di terzi, aggiungili solo in locale
+app/src/main/res/drawable/logo_*.png
