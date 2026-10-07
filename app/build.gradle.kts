@@ -6,17 +6,13 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
-// Chiave API e Client ID: di base si usano quelli predefiniti sotto; con local.properties puoi sostituirli.
+// Chiave API e Client ID: stanno in local.properties (non viene caricato su GitHub).
 val localProps = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { load(it) }
 }
-fun secret(name: String, default: String = ""): String =
-    localProps.getProperty(name, "").trim().ifEmpty { default }
+fun secret(name: String): String = localProps.getProperty(name, "").trim()
 
-// Valori predefiniti dell'app: se in local.properties non c'è una chiave propria si usano questi.
-val defaultOmkarApiKey = "ok_269cbda9d7572c83ca949ce9cf0b4184"
-val defaultGoogleWebClientId = "958659239181-85q7afma4tqvqq13jh5noe53hhmoolfv.apps.googleusercontent.com"
 
 android {
     namespace = "com.example.carrierlookup"
@@ -29,8 +25,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "OMKAR_API_KEY", "\"${secret("omkar.apiKey", defaultOmkarApiKey)}\"")
-        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${secret("google.webClientId", defaultGoogleWebClientId)}\"")
+        buildConfigField("String", "OMKAR_API_KEY", "\"${secret("omkar.apiKey")}\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${secret("google.webClientId")}\"")
     }
 
     buildTypes {

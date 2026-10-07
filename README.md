@@ -53,17 +53,17 @@ Serve Android 8.0 o superiore. Se Android avvisa che l'app non viene dal Play St
 ## 🚀 Come compilarla
 
 1. Clona il repository e aprilo con **Android Studio**.
-2. Premi ▶ con un telefono collegato. La chiave API e il Client ID di Google dell'app sono già inclusi, quindi funziona subito.
-3. (Facoltativo) Per usare una chiave tua, aggiungi in `local.properties`:
+2. Nel file `local.properties` (nella cartella principale) aggiungi:
    ```properties
    omkar.apiKey=LA_TUA_CHIAVE
    google.webClientId=IL_TUO_CLIENT_ID.apps.googleusercontent.com
    ```
    Trovi un esempio in `local.properties.example`. Il file `local.properties` non viene mai caricato su GitHub.
+3. Premi ▶ con un telefono collegato.
 
-**Chiave API.** Quella inclusa è condivisa da tutti (200 ricerche al mese in tutto): se finisce, l'app passa alla ricerca offline. Per avere crediti tuoi, prendi una chiave gratuita su [omkar.cloud](https://www.omkar.cloud).
+**Chiave API.** Si ottiene gratis su [omkar.cloud](https://www.omkar.cloud). Senza chiave l'app funziona solo in modalità offline. L'APK scaricabile da questa pagina ha già la chiave dell'autore, condivisa da tutti (200 ricerche al mese in tutto): se finisce, l'app passa alla ricerca offline.
 
-**Accesso con Google.** L'accesso funziona solo per gli account autorizzati nel progetto Google dell'app e per le build firmate con la chiave dell'autore. Se compili tu l'app con una chiave diversa, nella Google Cloud Console servono un client OAuth di tipo *Android* (con il nome del pacchetto `com.example.carrierlookup` e lo SHA-1 della tua chiave) e uno di tipo *Applicazione web*. Il Client ID del secondo va in `local.properties`. Senza, l'app funziona lo stesso ma senza accesso.
+**Accesso con Google.** Nell'APK scaricabile funziona solo per gli account autorizzati nel progetto Google dell'autore. Se compili tu l'app, nella Google Cloud Console servono un client OAuth di tipo *Android* (con il nome del pacchetto `com.example.carrierlookup` e lo SHA-1 della tua chiave) e uno di tipo *Applicazione web*. Il Client ID del secondo va in `local.properties`. Senza, l'app funziona lo stesso ma senza accesso.
 
 **Loghi degli operatori.** Sono in `app/src/main/res/drawable/` (`logo_tim.png`, `logo_vodafone.png`, `logo_windtre.png`, `logo_iliad.png`, `logo_fastweb.png`). Sono marchi dei rispettivi proprietari, usati solo per indicare l'operatore. Se manca un file, l'app mostra un cerchio colorato con l'iniziale.
 
@@ -72,7 +72,7 @@ Serve Android 8.0 o superiore. Se Android avvisa che l'app non viene dal Play St
 - Con la **portabilità del numero** (MNP) l'operatore mostrato può non essere quello attuale.
 - Non esiste un elenco mondiale di spammer: il giudizio anti spam si basa su regole (tipo di numero, prefissi usati nelle truffe) e sulla tua lista nera.
 - Il blocco delle chiamate funziona solo dopo aver scelto l'app come app anti spam nelle impostazioni di Android (da Android 10).
-- La chiave API inclusa è pubblica: chiunque può usarla e consumarne i crediti. Per un uso serio metti una chiave tua.
+- La chiave API dentro l'APK può essere estratta da chi lo smonta. Per un uso serio compila con una chiave tua.
 
 ## ☕ Sostieni il progetto
 
@@ -89,7 +89,7 @@ Rilasciata con licenza **MIT**, vedi il file [LICENSE](LICENSE).
 
 **Carrier Lookup** is an Android app (Kotlin + Jetpack Compose, Material 3) that finds the carrier, line type and country of a phone number. It uses the omkar.cloud API online and Google's libphonenumber offline, and includes a rule-based spam risk check, a personal blocklist, incoming call blocking, search history, credit counter, dark/light theme and Italian/English UI.
 
-To build it, just open the project in Android Studio and press Run: a shared API key and Google Client ID are already included (200 online searches per month in total, then it falls back to offline). To use your own, set `omkar.apiKey` and `google.webClientId` in `local.properties` (see `local.properties.example`). Google sign-in only works for builds signed with the author's key. Operator logos are trademarks of their respective owners and are used only to identify the carrier.
+To build it, open the project in Android Studio, set `omkar.apiKey` and `google.webClientId` in `local.properties` (see `local.properties.example`) and press Run. The downloadable APK already includes the author's shared API key (200 online searches per month in total, then it falls back to offline). Operator logos are trademarks of their respective owners and are used only to identify the carrier.
 
 Released under the MIT license. Made by Clacson.
 
