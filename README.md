@@ -53,7 +53,7 @@ App Android moderna in Kotlin e Jetpack Compose, con filtro anti spam e blocco d
 
 **Accesso con Google.** Nella Google Cloud Console servono un client OAuth di tipo *Android* (con il nome del pacchetto `com.example.carrierlookup` e lo SHA-1 della tua chiave) e uno di tipo *Applicazione web*. Il Client ID del secondo va in `local.properties`. Senza, l'app funziona lo stesso ma senza accesso.
 
-**Loghi degli operatori.** Sono marchi di terzi e non sono inclusi. Per mostrarli, copia i file in `app/src/main/res/drawable/` con questi nomi: `logo_tim.png`, `logo_vodafone.png`, `logo_windtre.png`, `logo_iliad.png`, `logo_fastweb.png`. Se mancano, l'app usa un cerchio colorato con l'iniziale.
+**Loghi degli operatori.** Sono in `app/src/main/res/drawable/` (`logo_tim.png`, `logo_vodafone.png`, `logo_windtre.png`, `logo_iliad.png`, `logo_fastweb.png`). Sono marchi dei rispettivi proprietari, usati solo per indicare l'operatore. Se manca un file, l'app mostra un cerchio colorato con l'iniziale.
 
 ## ⚠️ Cose da sapere
 
@@ -77,7 +77,7 @@ Rilasciata con licenza **MIT**, vedi il file [LICENSE](LICENSE).
 
 **Carrier Lookup** is an Android app (Kotlin + Jetpack Compose, Material 3) that finds the carrier, line type and country of a phone number. It uses the omkar.cloud API online and Google's libphonenumber offline, and includes a rule-based spam risk check, a personal blocklist, incoming call blocking, search history, credit counter, dark/light theme and Italian/English UI.
 
-To build it, open the project in Android Studio and add `omkar.apiKey` and `google.webClientId` to `local.properties` (see `local.properties.example`). Operator logos are not included (third-party trademarks).
+To build it, open the project in Android Studio and add `omkar.apiKey` and `google.webClientId` to `local.properties` (see `local.properties.example`). Operator logos are trademarks of their respective owners and are used only to identify the carrier.
 
 Released under the MIT license. Made by Clacson.
 
