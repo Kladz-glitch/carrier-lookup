@@ -1,33 +1,84 @@
-# Carrier Lookup
+<div align="center">
 
-App Android (Kotlin + Jetpack Compose) che scopre l'operatore, il tipo di linea e il paese di un
-numero di telefono. Include cronologia, contatore dei crediti, filtro anti spam con blocco chiamate,
-accesso con Google, tema scuro/chiaro e interfaccia in italiano e inglese.
+# 📱 Carrier Lookup
 
-Fatta da **Clacson**.
+**Scopri l'operatore, il tipo di linea e il paese di qualsiasi numero di telefono.**
 
-## Come funziona
-- **Online**: [omkar.cloud Phone Lookup API](https://www.omkar.cloud) (1 credito a ricerca).
-- **Offline**: libphonenumber di Google, usata se la fonte online non risponde.
-- **Anti spam**: giudizio basato su regole (numeri premium, VoIP, prefissi usati nelle truffe) e su una lista nera personale.
+App Android moderna in Kotlin e Jetpack Compose, con filtro anti spam e blocco delle chiamate.
 
-## Come compilarla
-1. Apri la cartella del progetto con Android Studio.
-2. Copia `local.properties.example` nelle righe di `local.properties` e inserisci i tuoi valori:
+![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0-7F52FF?logo=kotlin&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
+![License](https://img.shields.io/badge/licenza-MIT-green)
+
+*Fatta da **Clacson***
+
+</div>
+
+---
+
+## ✨ Cosa fa
+
+| | |
+|---|---|
+| 🔎 **Ricerca numeri** | Scegli il paese, scrivi il numero e ottieni operatore, tipo di linea (mobile, fisso, VoIP…), paese e validità. Puoi incollare un numero o sceglierlo dalla rubrica. |
+| 🌐 **Online + offline** | Usa l'API di omkar.cloud per dati reali; se la rete non c'è o i crediti finiscono, ripiega su libphonenumber di Google. |
+| 🛡️ **Anti spam** | Ogni risultato ha un livello di rischio (basso, medio, alto) con i motivi. Lista nera personale e blocco delle chiamate in arrivo. |
+| 📊 **Contatore crediti** | Quante ricerche online hai usato oggi e nel mese, con data e ora dell'ultima. |
+| 🕘 **Cronologia** | Le ultime ricerche restano salvate sul telefono. |
+| 📡 **Offerte operatori** | Scorciatoie ai siti di TIM, Vodafone, WindTre, Iliad e Fastweb. |
+| 🌗 **Tema e lingua** | Tema scuro o chiaro, interfaccia in italiano e inglese. |
+| 👋 **Accesso con Google** | Saluto personalizzato in base all'ora del giorno. |
+
+## 🧰 Tecnologie
+
+- **Kotlin** e **Jetpack Compose** con **Material 3**
+- **libphonenumber** (con moduli carrier e geocoder) per la ricerca offline
+- **Credential Manager** per l'accesso con Google
+- **CallScreeningService** per il blocco delle chiamate
+- API [omkar.cloud Phone Lookup](https://www.omkar.cloud) per la ricerca online
+
+## 🚀 Come compilarla
+
+1. Clona il repository e aprilo con **Android Studio**.
+2. Crea (o apri) il file `local.properties` nella cartella principale e aggiungi:
+   ```properties
+   omkar.apiKey=LA_TUA_CHIAVE
+   google.webClientId=IL_TUO_CLIENT_ID.apps.googleusercontent.com
    ```
-   omkar.apiKey=...
-   google.webClientId=...
-   ```
-3. (Facoltativo) Aggiungi i loghi degli operatori in `app/src/main/res/drawable/` come
-   `logo_tim.png`, `logo_vodafone.png`, `logo_windtre.png`, `logo_iliad.png`, `logo_fastweb.png`.
-   Sono marchi di terzi, quindi non sono inclusi nel repository.
-4. Premi ▶.
+   Trovi un esempio in `local.properties.example`. Il file `local.properties` non viene mai caricato su GitHub.
+3. Aspetta la sincronizzazione di Gradle e premi ▶ con un telefono collegato.
 
-Per l'accesso con Google servono un client OAuth Android (nome pacchetto `com.example.carrierlookup`
-e SHA-1 della tua chiave) e un client Web nella Google Cloud Console.
+**Chiave API.** Si ottiene gratis su [omkar.cloud](https://www.omkar.cloud). Senza chiave l'app funziona solo in modalità offline.
 
-## Sostieni il progetto
-[PayPal](https://paypal.me/claudiorubin)
+**Accesso con Google.** Nella Google Cloud Console servono un client OAuth di tipo *Android* (con il nome del pacchetto `com.example.carrierlookup` e lo SHA-1 della tua chiave) e uno di tipo *Applicazione web*. Il Client ID del secondo va in `local.properties`. Senza, l'app funziona lo stesso ma senza accesso.
 
-## Licenza
-MIT, vedi `LICENSE`.
+**Loghi degli operatori.** Sono marchi di terzi e non sono inclusi. Per mostrarli, copia i file in `app/src/main/res/drawable/` con questi nomi: `logo_tim.png`, `logo_vodafone.png`, `logo_windtre.png`, `logo_iliad.png`, `logo_fastweb.png`. Se mancano, l'app usa un cerchio colorato con l'iniziale.
+
+## ⚠️ Cose da sapere
+
+- Con la **portabilità del numero** (MNP) l'operatore mostrato può non essere quello attuale.
+- Non esiste un elenco mondiale di spammer: il giudizio anti spam si basa su regole (tipo di numero, prefissi usati nelle truffe) e sulla tua lista nera.
+- Il blocco delle chiamate funziona solo dopo aver scelto l'app come app anti spam nelle impostazioni di Android (da Android 10).
+- La chiave API, anche se tenuta fuori dal codice, può essere estratta dall'APK. Usa una chiave tua e tieni d'occhio i crediti.
+
+## ☕ Sostieni il progetto
+
+Se l'app ti è utile puoi offrirmi un caffè: **[paypal.me/claudiorubin](https://paypal.me/claudiorubin)**
+
+## 📄 Licenza
+
+Rilasciata con licenza **MIT**, vedi il file [LICENSE](LICENSE).
+
+---
+
+<details>
+<summary><b>🇬🇧 English summary</b></summary>
+
+**Carrier Lookup** is an Android app (Kotlin + Jetpack Compose, Material 3) that finds the carrier, line type and country of a phone number. It uses the omkar.cloud API online and Google's libphonenumber offline, and includes a rule-based spam risk check, a personal blocklist, incoming call blocking, search history, credit counter, dark/light theme and Italian/English UI.
+
+To build it, open the project in Android Studio and add `omkar.apiKey` and `google.webClientId` to `local.properties` (see `local.properties.example`). Operator logos are not included (third-party trademarks).
+
+Released under the MIT license. Made by Clacson.
+
+</details>
