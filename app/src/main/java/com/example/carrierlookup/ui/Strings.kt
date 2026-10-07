@@ -108,7 +108,14 @@ class Strings(
     val donateTitle: String,
     val donateHint: String,
     val donateButton: String,
-    val donateNotSet: String
+    val donateNotSet: String,
+    val hiyaTitle: String,
+    val hiyaExplain: String,
+    val hiyaSteps: String,
+    val hiyaInstall: String,
+    val hiyaSetDefault: String,
+    val hiyaSamsungTitle: String,
+    val hiyaSamsung: String
 ) {
     fun greeting(hour: Int): String = when (hour) {
         in 5..11 -> greetMorning
@@ -240,12 +247,19 @@ val StringsIt = Strings(
     blocklistEmpty = "Nessun numero bloccato.",
     addNumberHint = "Numero da bloccare (es. +39 333…)",
     add = "Aggiungi",
-    spamLimits = "Non esiste un elenco mondiale di spammer: il giudizio si basa su regole (tipo di numero e prefisso) e sulla tua lista nera.",
+    spamLimits = "Il «Rischio spam» sotto ogni ricerca è una stima basata su regole (tipo di numero e prefisso). Il blocco vero delle chiamate lo fa Hiya.",
     invalidNumberInput = "Numero non valido",
     donateTitle = "Offrimi un caffè",
     donateHint = "Se l'app ti è utile, puoi sostenerne lo sviluppo con una donazione libera.",
     donateButton = "Dona",
-    donateNotSet = "Link per le donazioni non ancora configurato."
+    donateNotSet = "Link per le donazioni non ancora configurato.",
+    hiyaTitle = "Hiya",
+    hiyaExplain = "Per bloccare le chiamate spam l'app si affida a Hiya, una delle app anti spam più diffuse: riconosce i numeri segnalati da milioni di utenti e li blocca o li segnala mentre squillano.",
+    hiyaSteps = "1. Installa Hiya dal Play Store.\n2. Aprila e completa la configurazione.\n3. Premi il secondo pulsante e scegli Hiya come app per ID chiamante e spam.",
+    hiyaInstall = "Installa Hiya",
+    hiyaSetDefault = "Scegli Hiya come app anti spam",
+    hiyaSamsungTitle = "Hai un Samsung?",
+    hiyaSamsung = "Molti Samsung hanno già Hiya integrato: si trova nelle impostazioni dell'app Telefono, alla voce sull'identificazione del chiamante e la protezione dallo spam. Se è attivo, non devi installare altro."
 )
 
 val StringsEn = Strings(
@@ -345,12 +359,19 @@ val StringsEn = Strings(
     blocklistEmpty = "No blocked numbers.",
     addNumberHint = "Number to block (e.g. +39 333…)",
     add = "Add",
-    spamLimits = "There is no worldwide list of spammers: the verdict relies on rules (number type and prefix) and on your blocklist.",
+    spamLimits = "The Spam risk shown under each search is a rule-based estimate (number type and prefix). Actual call blocking is done by Hiya.",
     invalidNumberInput = "Invalid number",
     donateTitle = "Buy me a coffee",
     donateHint = "If the app is useful to you, you can support its development with a free donation.",
     donateButton = "Donate",
-    donateNotSet = "Donation link not set up yet."
+    donateNotSet = "Donation link not set up yet.",
+    hiyaTitle = "Hiya",
+    hiyaExplain = "To block spam calls this app relies on Hiya, one of the most popular anti-spam apps: it recognizes numbers reported by millions of users and blocks or flags them while they ring.",
+    hiyaSteps = "1. Install Hiya from the Play Store.\n2. Open it and complete the setup.\n3. Press the second button and choose Hiya as your caller ID and spam app.",
+    hiyaInstall = "Get Hiya",
+    hiyaSetDefault = "Set Hiya as your spam app",
+    hiyaSamsungTitle = "Have a Samsung phone?",
+    hiyaSamsung = "Many Samsung phones already include Hiya: look in the Phone app settings for the caller ID and spam protection option. If it is on, you do not need to install anything else."
 )
 
 val LocalStrings = staticCompositionLocalOf { StringsIt }

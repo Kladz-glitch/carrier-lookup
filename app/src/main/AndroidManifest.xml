@@ -20,15 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Filtro chiamate: Android lo usa solo se l'utente sceglie l'app come "app anti spam" -->
-        <service
-            android:name=".SpamCallScreeningService"
-            android:exported="true"
-            android:permission="android.permission.BIND_SCREENING_SERVICE">
-            <intent-filter>
-                <action android:name="android.telecom.CallScreeningService" />
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>
